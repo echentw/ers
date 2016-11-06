@@ -1,7 +1,10 @@
+Game = require('./game')
+
 class Channel
   constructor: ->
     @users = {}
     @disconnectedUsers = {}
+    @game = null
 
   findUser: (username) =>
     return username of @users
@@ -40,5 +43,18 @@ class Channel
 
   empty: ->
     return Object.keys(@users).length == 0
+
+  start: =>
+    usernames = []
+    for username of @users
+      usernames.push(username)
+    @game = new Game(usernames)
+
+  action: (username, action) =>
+    if @game
+      if action == 'playCard'
+        @game.playCard(username)
+      else if action == 'slap'
+        @game.slap(username)
 
 module.exports = Channel

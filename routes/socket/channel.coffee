@@ -58,6 +58,21 @@ hit = (data) ->
   io.sockets.in(session.channelID).emit('update', {message: message})
   console.log message
 
+start = (data) ->
+  socket = this
+  session = socket.handshake.session
+
+  if session.channelID != data.channelID ||
+      session.username != data.username
+    socket.emit('eror', {message: 'Authentication failed'})
+
+  channel = database.find(data.channelID)
+  if !channel
+    socket.emit('eror', {message: 'Game not found.'})
+    return
+
+  channel.start()
+
 playCard = (data) ->
   socket = this
   session = socket.handshake.session
@@ -66,7 +81,11 @@ playCard = (data) ->
       session.username != data.username
     return
 
-  console.log (session.username + ' played a card')
+  channel = database.find(data.channelID)
+  if !channel
+    socket.emit('eror', {message: 'Game not found.'})
+    return
+  channel.action(session.username, 'playCard')
 
 slap = (data) ->
   socket = this
@@ -76,7 +95,11 @@ slap = (data) ->
       session.username != data.username
     return
 
-  console.log (session.username + ' slapped')
+  channel = database.find(data.channelID)
+  if !channel
+    socket.emit('eror', {message: 'Game not found.'})
+    return
+  channel.action(session.username, 'slap')
 
 module.exports.attach = (socketIO, db) ->
   database = db
@@ -86,6 +109,7 @@ module.exports.attach = (socketIO, db) ->
     socket.on('join', join)
     socket.on('disconnect', disconnect)
     socket.on('hit', hit)
+    socket.on('start', start)
     socket.on('playCard', playCard)
     socket.on('slap', slap)
   )

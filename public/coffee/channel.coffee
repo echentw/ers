@@ -11,6 +11,10 @@ require(['jquery', 'client'], ($, Client) ->
       client.ping()
     )
 
+    $('#start').click( ->
+      client.start()
+    )
+
     $(document).keypress((e) ->
       if e.which == 13
         client.playCard()

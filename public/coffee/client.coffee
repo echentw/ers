@@ -10,6 +10,9 @@ define(['socket-io'], (io) ->
     ping: =>
       @socket.emit('hit', {channelID: @channelID, username: @username})
 
+    start: =>
+      @socket.emit('start', {channelID: @channelID, username: @username})
+
     playCard: =>
       @socket.emit('playCard', {channelID: @channelID, username: @username})
 
