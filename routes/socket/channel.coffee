@@ -58,6 +58,26 @@ hit = (data) ->
   io.sockets.in(session.channelID).emit('update', {message: message})
   console.log message
 
+playCard = (data) ->
+  socket = this
+  session = socket.handshake.session
+
+  if session.channelID != data.channelID ||
+      session.username != data.username
+    return
+
+  console.log (session.username + ' played a card')
+
+slap = (data) ->
+  socket = this
+  session = socket.handshake.session
+
+  if session.channelID != data.channelID ||
+      session.username != data.username
+    return
+
+  console.log (session.username + ' slapped')
+
 module.exports.attach = (socketIO, db) ->
   database = db
   io = socketIO
@@ -66,4 +86,6 @@ module.exports.attach = (socketIO, db) ->
     socket.on('join', join)
     socket.on('disconnect', disconnect)
     socket.on('hit', hit)
+    socket.on('playCard', playCard)
+    socket.on('slap', slap)
   )

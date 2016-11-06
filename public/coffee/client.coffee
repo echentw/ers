@@ -10,6 +10,12 @@ define(['socket-io'], (io) ->
     ping: =>
       @socket.emit('hit', {channelID: @channelID, username: @username})
 
+    playCard: =>
+      @socket.emit('playCard', {channelID: @channelID, username: @username})
+
+    slap: =>
+      @socket.emit('slap', {channelID: @channelID, username: @username})
+
     getSocket = ->
       socket = io.connect()
       socket.on('update', (data) ->
