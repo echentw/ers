@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Channel</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+  </head>
+  <body>
+    <h1>Create a username to join channel <%= channelID %></h1>
+
+    <p id="message"><%= message %></p>
+
+    <form method="post" action="/channel/<%= channelID %>/join">
+      Username: <input type="text" name="username"><br>
+      <input name="channelID" value="<%= channelID %>" hidden>
+      <input type="submit" value="Join Channel">
+    </form>
+  </body>
+</html>
