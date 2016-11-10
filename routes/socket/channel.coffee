@@ -85,7 +85,15 @@ playCard = (data) ->
   if !channel
     socket.emit('eror', {message: 'Game not found.'})
     return
-  channel.action(session.username, 'playCard')
+
+  result = channel.action(session.username, 'playCard')
+  if result.success
+    playedCard = result.playedCard
+    message = session.username + ' played the ' + playedCard.toString()
+    io.sockets.in(session.channelID).emit('move', {
+      message: message,
+      card: playedCard
+    })
 
 slap = (data) ->
   socket = this
@@ -99,7 +107,21 @@ slap = (data) ->
   if !channel
     socket.emit('eror', {message: 'Game not found.'})
     return
-  channel.action(session.username, 'slap')
+
+  result = channel.action(session.username, 'slap')
+  if result.success
+    message = session.username + ' slapped successfully!'
+    io.sockets.in(session.channelID).emit('move', {
+      message: message,
+    })
+  else
+    burnedCard = result.burnedCard
+    message = session.username + ' slapped unsuccessfully and'
+    if burnedCard == null
+      message += ' has an empty hand'
+    else
+      message += ' burned the ' + burnedCard.toString()
+    io.sockets.in(session.channelID).emit('move', {message: message, card: burnedCard})
 
 module.exports.attach = (socketIO, db) ->
   database = db

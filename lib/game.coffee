@@ -4,38 +4,35 @@ Deck = require('./cards/deck')
 class Game
 
   constructor: (usernames) ->
+    @numPlayers = usernames.length
+    @pile = new CardQueue()
+    @turn = 0
 
-    @users = {}
-    for username in usernames
-      @users[username] = new CardQueue()
+    @handsByUsername = {}
+    @orderByUsername = {}
+    @ordering = (-1 for i in [0 ... @numPlayers])
+    for username, order in usernames
+      @handsByUsername[username] = new CardQueue()
+      @orderByUsername[username] = order
+      @ordering[order] = username
 
     deck = new Deck()
     deck.shuffle()
-
     while not deck.isEmpty()
-      for username in usernames
-        @users[username].push(deck.deal())
+      for username in @ordering
+        @handsByUsername[username].push(deck.deal())
         if deck.isEmpty()
           break
 
-    @order = []
-    for username in usernames
-      @order.push(username)
-
-    @pile = new CardQueue()
-
-    @turn = 0
-
   playCard: (username) =>
-    if username != @order[@turn]
-      return
-
-    card = @users[username].pop()
+    if username != @ordering[@turn]
+      return {success: false}
+    card = @handsByUsername[username].pop()
     @pile.push(card)
+    @turn = (@turn + 1) % @numPlayers
 
     console.log (username + " plays the " + card.toString())
-
-    @turn = (@turn + 1) % (Object.keys(@users).length)
+    return {success: true, playedCard: card}
 
   slap: (username) =>
     console.log (username + " slaps")
@@ -43,12 +40,16 @@ class Game
       console.log (username + " slaps correctly!")
       while not @pile.isEmpty()
         card = @pile.pop()
-        @users[username].push(card)
+        @handsByUsername[username].push(card)
+      @turn = @orderByUsername[username]
+      return {success: true}
     else
-      if @users[username].isEmpty()
-        return
-      card = @users[username].pop()
+      if @handsByUsername[username].isEmpty()
+        return {success: false, burnedCard: null}
+      card = @handsByUsername[username].pop()
       @pile.burnPush(card)
+
       console.log (username + " burns the " + card.toString())
+      return {success: false, burnedCard: card}
 
 module.exports = Game

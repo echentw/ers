@@ -53,8 +53,8 @@ class Channel
   action: (username, action) =>
     if @game
       if action == 'playCard'
-        @game.playCard(username)
+        return @game.playCard(username)
       else if action == 'slap'
-        @game.slap(username)
+        return @game.slap(username)
 
 module.exports = Channel

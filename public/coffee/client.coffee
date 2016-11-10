@@ -24,7 +24,10 @@ define(['socket-io'], (io) ->
       socket.on('update', (data) ->
         console.log data.message
       )
-      socket.on('error', (data) ->
+      socket.on('move', (data) ->
+        console.log data.message
+      )
+      socket.on('eror', (data) ->
         console.log data.message
       )
       return socket
