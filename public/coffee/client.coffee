@@ -7,9 +7,6 @@ define(['socket-io'], (io) ->
       @socket = getSocket()
       @socket.emit('join', {channelID: channelID, username: username})
 
-    ping: =>
-      @socket.emit('hit', {channelID: @channelID, username: @username})
-
     start: =>
       @socket.emit('start', {channelID: @channelID, username: @username})
 

@@ -46,18 +46,6 @@ disconnect = ->
       database.delete(channelID)
   , 2000)
 
-hit = (data) ->
-  socket = this
-  session = socket.handshake.session
-
-  if session.channelID != data.channelID ||
-      session.username != data.username
-    return
-
-  message = session.username + ' pinged channel ' + session.channelID
-  io.sockets.in(session.channelID).emit('update', {message: message})
-  console.log message
-
 start = (data) ->
   socket = this
   session = socket.handshake.session
@@ -111,9 +99,7 @@ slap = (data) ->
   result = channel.action(session.username, 'slap')
   if result.success
     message = session.username + ' slapped successfully!'
-    io.sockets.in(session.channelID).emit('move', {
-      message: message,
-    })
+    io.sockets.in(session.channelID).emit('move', {message: message})
   else
     burnedCard = result.burnedCard
     message = session.username + ' slapped unsuccessfully and'
@@ -130,7 +116,6 @@ module.exports.attach = (socketIO, db) ->
   io.sockets.on('connection', (socket) ->
     socket.on('join', join)
     socket.on('disconnect', disconnect)
-    socket.on('hit', hit)
     socket.on('start', start)
     socket.on('playCard', playCard)
     socket.on('slap', slap)
