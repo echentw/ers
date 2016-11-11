@@ -8,10 +8,12 @@ join = (data) ->
   username = data.username
 
   if socket.handshake.session.channelID != channelID
+    socket.emit('eror', {message: 'Authentication failed.'})
     return
 
   channel = database.find(channelID)
   if !channel
+    socket.emit('eror', {message: 'Authentication failed.'})
     return
 
   socket.join(channelID)
@@ -67,6 +69,7 @@ playCard = (data) ->
 
   if session.channelID != data.channelID ||
       session.username != data.username
+    socket.emit('eror', {message: 'Authentication failed.'})
     return
 
   channel = database.find(data.channelID)
@@ -90,6 +93,7 @@ slap = (data) ->
 
   if session.channelID != data.channelID ||
       session.username != data.username
+    socket.emit('eror', {message: 'Authentication failed.'})
     return
 
   channel = database.find(data.channelID)
@@ -102,6 +106,7 @@ slap = (data) ->
     message = session.username + ' slapped successfully!'
     io.sockets.in(session.channelID).emit('slap', {
       username: session.username,
+      success: true,
       message: message
     })
   else
@@ -113,6 +118,7 @@ slap = (data) ->
       message += ' burned the ' + burnedCard.toString()
     io.sockets.in(session.channelID).emit('slap', {
       username: session.username,
+      success: false,
       card: burnedCard,
       message: message
     })

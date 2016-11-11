@@ -9,26 +9,26 @@ class Card
   getValue: =>
     return @value
 
+  getValueString: =>
+    switch @value
+      when 1 then return "ace"
+      when 11 then return "jack"
+      when 12 then return "queen"
+      when 13 then return "king"
+      else return "" + @value
+
   getSuit: =>
     return @suit
 
-  toString: =>
-    value
-    switch @value
-      when 1 then value = "ace"
-      when 11 then value = "jack"
-      when 12 then value = "queen"
-      when 13 then value = "king"
-      else value = @value
-
-    suit
+  getSuitString: =>
     switch @suit
-      when Suit.CLUBS then suit = "clubs"
-      when Suit.DIAMONDS then suit = "diamonds"
-      when Suit.HEARTS then suit = "hearts"
-      when Suit.SPADES then suit = "spades"
-      else suit = "WHAAAAAAAAAAAAAAAAAAAAAAAAAAT"
+      when Suit.CLUBS then return "clubs"
+      when Suit.DIAMONDS then return "diamonds"
+      when Suit.HEARTS then return "hearts"
+      when Suit.SPADES then return "spades"
+      else return "HELP ERROR!!!"
 
-    return (value + " of " + suit)
+  toString: =>
+    return (@getValueString() + " of " + @getSuitString())
 
 module.exports = Card

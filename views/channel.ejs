@@ -3,6 +3,7 @@
   <head>
     <title>Channel</title>
     <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/bouncejs/anim.css"/>
     <script src="/vendor/js/require.js"></script>
     <script src="/js/requirejs-config.js"></script>
     <script src="/js/channel.js"></script>
@@ -12,7 +13,10 @@
     <p>Channel ID: <%= channelID %></p>
     <p>Username: <%= username %></p>
 
-    <input id="start" type="submit" value="Start Game">
+    <input id="start" type="submit" value="Start Game"><br>
+
+    <img id="cardHand" class="card" src="/img/Card_back_01.svg">
+    <img id="card" class="card animation-target" src="">
 
     <div hidden>
       <div id="channelID"><%= channelID %></div>

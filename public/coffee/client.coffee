@@ -1,4 +1,4 @@
-define(['socket-io'], (io) ->
+define(['socket-io', 'jquery', 'card', 'card_path'], (io, $, Card, CardPath) ->
 
   class Client
     constructor: (channelID, username) ->
@@ -22,10 +22,19 @@ define(['socket-io'], (io) ->
         console.log data.message
       )
       socket.on('move', (data) ->
-        console.log data.message
+        card = new Card(data.card.value, data.card.suit)
+        cardPath = CardPath.getCardPath(card)
+
+        $('#card').attr('class', 'card')
+        $('#card').attr('src', cardPath)
+        setTimeout( ->
+          $('#card').attr('class', 'card animation-target')
+        , 10)
       )
       socket.on('slap', (data) ->
         console.log data.message
+        if data.success
+          $('#card').attr('src', '')
       )
       socket.on('eror', (data) ->
         console.log data.message
