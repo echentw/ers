@@ -7,10 +7,6 @@ require(['jquery', 'client'], ($, Client) ->
 
     client = new Client(channelID, username)
 
-    $('#ping').click( ->
-      client.ping()
-    )
-
     $('#start').click( ->
       client.start()
     )

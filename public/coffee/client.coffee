@@ -24,6 +24,9 @@ define(['socket-io'], (io) ->
       socket.on('move', (data) ->
         console.log data.message
       )
+      socket.on('slap', (data) ->
+        console.log data.message
+      )
       socket.on('eror', (data) ->
         console.log data.message
       )

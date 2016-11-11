@@ -79,8 +79,9 @@ playCard = (data) ->
     playedCard = result.playedCard
     message = session.username + ' played the ' + playedCard.toString()
     io.sockets.in(session.channelID).emit('move', {
-      message: message,
-      card: playedCard
+      username: session.username,
+      card: playedCard,
+      message: message
     })
 
 slap = (data) ->
@@ -99,7 +100,10 @@ slap = (data) ->
   result = channel.action(session.username, 'slap')
   if result.success
     message = session.username + ' slapped successfully!'
-    io.sockets.in(session.channelID).emit('move', {message: message})
+    io.sockets.in(session.channelID).emit('slap', {
+      username: session.username,
+      message: message
+    })
   else
     burnedCard = result.burnedCard
     message = session.username + ' slapped unsuccessfully and'
@@ -107,7 +111,11 @@ slap = (data) ->
       message += ' has an empty hand'
     else
       message += ' burned the ' + burnedCard.toString()
-    io.sockets.in(session.channelID).emit('move', {message: message, card: burnedCard})
+    io.sockets.in(session.channelID).emit('slap', {
+      username: session.username,
+      card: burnedCard,
+      message: message
+    })
 
 module.exports.attach = (socketIO, db) ->
   database = db
